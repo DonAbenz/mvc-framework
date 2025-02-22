@@ -5,11 +5,11 @@ const BASE_PATH = __DIR__ . '/../';
 require_once BASE_PATH . "core/Router.php";
 
 $router = new Router();
-$router->add('/home', 'app/views/home.php');
+$router->add('/home', 'HomeController@index');
 
 $uri = $_SERVER['REQUEST_URI'];
 
-echo $router->dispatch($uri);
+$router->dispatch($uri);
 
 function dd($value)
 {

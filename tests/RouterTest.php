@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 require_once "./core/Router.php";
+require_once "./app/controllers/HomeController.php";
 
 class RouterTest extends TestCase
 {

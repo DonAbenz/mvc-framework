@@ -15,6 +15,13 @@ class Router
          return "404 - Page Not Found";
       }
 
-      return "200 OK";
+      // Extract controller and method
+      list($controllerName, $method) = explode('@', $this->routes[$url]);
+
+      // Load the controller dynamically
+      require_once __DIR__ . "/../app/controllers/{$controllerName}.php";
+      $controller = new $controllerName();
+
+      return $controller->$method();
    }
 }
