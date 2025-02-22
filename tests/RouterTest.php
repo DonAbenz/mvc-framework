@@ -18,6 +18,12 @@ class RouterTest extends TestCase
       $router = new Router();
       $router->add('/home', 'HomeController@index');
 
-      $this->assertEquals("200 OK", $router->dispatch('/home'));
+      // Simulate a request
+      $response = $router->dispatch('/home');
+
+      // The expected output should be the rendered view content
+      $expectedViewContent = "<h1>Welcome to My MVC Framework!</h1>";
+
+      $this->assertStringContainsString($expectedViewContent, $response);
    }
 }

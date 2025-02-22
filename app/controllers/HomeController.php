@@ -1,11 +1,10 @@
 <?php
+require_once __DIR__ . "/../../core/View.php";
 
 class HomeController
 {
    public function index()
    {
-      require __DIR__ . "/../../app/views/home.php";
-
-      return "200 OK";
+      return View::render('home', ['message' => 'Welcome to My MVC Framework!']);
    }
 }

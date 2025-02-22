@@ -6,9 +6,15 @@ require_once "./app/controllers/HomeController.php";
 
 class ControllerTest extends TestCase
 {
-   public function testIndexReturnsMessage()
+   public function test_index_returns_message()
    {
       $controller = new HomeController();
-      $this->assertEquals("200 OK", $controller->index());
+      $response = $controller->index();
+
+      // Expected content from the view
+      $expectedContent = "<h1>Welcome to My MVC Framework!</h1>";
+
+      // Check if the response contains the expected HTML output
+      $this->assertStringContainsString($expectedContent, $response);
    }
 }
