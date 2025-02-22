@@ -1,1 +1,1 @@
-{"version":1,"defects":[],"times":{"ExampleTest::test_true":0.004}}
+{"version":1,"defects":{"RouterTest::test_can_add_route":7,"RouterTest::test_dispatch_returns_404":7},"times":{"ExampleTest::test_true":0.003,"RouterTest::testDispatchReturns404":0,"RouterTest::test_dispatch_returns_404":0,"RouterTest::test_can_add_route":0}}
