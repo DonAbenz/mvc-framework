@@ -1,0 +1,12 @@
+{
+    "name": "donabenz/mvc-framework",
+    "authors": [
+        {
+            "name": "DonAbenz",
+            "email": "31627743+DonAbenz@users.noreply.github.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^12.0"
+    }
+}
