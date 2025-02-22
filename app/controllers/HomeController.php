@@ -1,10 +1,17 @@
 <?php
 require_once __DIR__ . "/../../core/View.php";
+require_once __DIR__ . "/../../app/models/User.php";
 
 class HomeController
 {
    public function index()
    {
-      return View::render('home', ['message' => 'Welcome to My MVC Framework!']);
+      $userModel = new User();
+      $users = $userModel->getUsers();
+
+      return View::render('home', [
+         'message' => 'Welcome to My MVC Framework!',
+         'users' => $users
+      ]);
    }
 }

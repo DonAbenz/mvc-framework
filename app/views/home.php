@@ -9,6 +9,21 @@
 
 <body>
    <h1><?= $message; ?></h1>
+
+   <table>
+      <thead>
+         <th>name</th>
+         <th>email</th>
+      </thead>
+      <tbody>
+         <?php foreach ($users as $user) : ?>
+            <tr>
+               <td><?= $user['name'] ?></td>
+               <td><?= $user['email'] ?></td>
+            </tr>
+         <?php endforeach ?>
+      </tbody>
+   </table>
 </body>
 
 </html>
