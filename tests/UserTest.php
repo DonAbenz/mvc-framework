@@ -1,8 +1,7 @@
 <?php
 
+use App\Models\User;
 use PHPUnit\Framework\TestCase;
-
-require_once "./app/models/User.php";
 
 class UserTest extends TestCase
 {

@@ -1,8 +1,7 @@
 <?php
 
+use App\Controllers\HomeController;
 use PHPUnit\Framework\TestCase;
-
-require_once "./app/controllers/HomeController.php";
 
 class ControllerTest extends TestCase
 {

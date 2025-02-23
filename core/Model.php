@@ -1,6 +1,9 @@
 <?php
 
-require_once __DIR__ . "/../config/config.php";
+namespace Core;
+
+use PDO;
+use PDOException;
 
 class Model
 {

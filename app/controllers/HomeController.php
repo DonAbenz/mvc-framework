@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . "/../../core/View.php";
-require_once __DIR__ . "/../../app/models/User.php";
+namespace App\Controllers;
+
+use App\Models\User;
+use Core\View;
 
 class HomeController
 {

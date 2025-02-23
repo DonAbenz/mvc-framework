@@ -1,4 +1,5 @@
 <?php
+namespace Core;
 
 class Router
 {
@@ -18,9 +19,15 @@ class Router
       // Extract controller and method
       list($controllerName, $method) = explode('@', $this->routes[$url]);
 
+      // Convert controller name to namespace
+      $controllerClass = "\\App\\Controllers\\{$controllerName}";
+
       // Load the controller dynamically
-      require_once __DIR__ . "/../app/controllers/{$controllerName}.php";
-      $controller = new $controllerName();
+      if (!class_exists($controllerClass)) {
+         die("Controller class not found: {$controllerClass}");
+      }
+
+      $controller = new $controllerClass();
 
       return $controller->$method();
    }

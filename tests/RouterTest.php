@@ -2,8 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-require_once "./core/Router.php";
-require_once "./app/controllers/HomeController.php";
+use Core\Router;
 
 class RouterTest extends TestCase
 {
