@@ -5,6 +5,8 @@ namespace Core;
 use PDO;
 use PDOException;
 
+require __DIR__ . '/../config/database.php';
+
 class Model
 {
    protected $db;
