@@ -14,28 +14,28 @@ class RouterTest extends TestCase
       $this->router = new Router();
    }
 
-   private function sendRequest($method = 'GET', $path = '/')
+   private function sendRequest($method = 'GET', $path = '/home')
    {
       $_SERVER['REQUEST_URI'] = $path;
       $_SERVER['REQUEST_METHOD'] = $method;
    }
 
-   public function test_can_add_route()
+   public function test_add_route_successfully()
    {
-      $this->router->add('GET', '/', function () {});
+      $this->router->add('GET', '/home', function () {});
 
       $this->assertTrue(($this->router->routes()[0] instanceof Route));
       $this->assertNotEmpty($this->router->routes());
       $this->assertCount(1, $this->router->routes());
       $this->assertEquals('GET', $this->router->routes()[0]->method());
-      $this->assertEquals('/', $this->router->routes()[0]->path());
+      $this->assertEquals('/home', $this->router->routes()[0]->path());
       $this->assertIsCallable($this->router->routes()[0]->handler());
    }
 
-   public function test_dispatch_redirect_uri()
+   public function test_dispatch_returns_redirect_for_mapped_uri()
    {
-      $this->router->add('GET', '/', fn() => "Hello World");
-      $this->router->add('GET', '/old-home', fn() => $this->router->redirect('/'));
+      $this->router->add('GET', '/home', fn() => "Hello World");
+      $this->router->add('GET', '/old-home', fn() => $this->router->redirect('/home'));
 
       $this->sendRequest();
       $response = $this->router->dispatch();
@@ -48,14 +48,12 @@ class RouterTest extends TestCase
       $this->router->dispatch();
       $output = ob_get_clean();
 
-      $this->assertEquals("Redirected to: /", trim($output));
+      $this->assertEquals("Redirected to: /home", trim($output));
    }
 
-
-
-   public function test_dispatch_success()
+   public function test_dispatch_returns_expected_response_for_existing_route()
    {
-      $this->router->add('GET', '/', fn() => "Hello World");
+      $this->router->add('GET', '/home', fn() => "Hello World");
 
       $this->sendRequest();
       $response = $this->router->dispatch();
@@ -63,15 +61,15 @@ class RouterTest extends TestCase
       $this->assertEquals("Hello World", $response);
    }
 
-   public function test_dispatch_returns_not_found()
+   public function test_dispatch_returns_not_found_for_unmapped_route()
    {
       $this->sendRequest();
       $this->assertEquals("not found", $this->router->dispatch());
    }
 
-   public function test_dispatch_returns_not_allowed()
+   public function test_dispatch_returns_not_allowed_for_invalid_http_method()
    {
-      $this->router->add('GET', '/', fn() => "Hello World");
+      $this->router->add('GET', '/home', fn() => "Hello World");
 
       $this->sendRequest(method: 'POST');
       $response = $this->router->dispatch();
@@ -79,9 +77,9 @@ class RouterTest extends TestCase
       $this->assertEquals("not allowed", $response);
    }
 
-   public function test_dispatch_returns_server_error()
+   public function test_dispatch_handles_server_error_gracefully()
    {
-      $route = $this->router->add('GET', '/', function () {
+      $route = $this->router->add('GET', '/home', function () {
          throw new Exception();
          return "Hello World";
       });

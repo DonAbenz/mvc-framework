@@ -7,6 +7,7 @@ use Throwable;
 class Router
 {
    protected array $routes = [];
+   protected Route $current;
 
    public function add(
       string $method,
@@ -19,6 +20,11 @@ class Router
          $handler
       );
       return $route;
+   }
+
+   public function current(): ?Route
+   {
+      return $this->current;
    }
 
    public function dispatch()
@@ -62,6 +68,7 @@ class Router
    {
       foreach ($this->routes as $route) {
          if ($route->matches($method, $path)) {
+            $this->current = $route;
             return $route;
          }
       }
@@ -71,14 +78,19 @@ class Router
 
    private function paths(): array
    {
-      return array_map(fn($route) => $route->path(), $this->routes);
+      $paths = [];
+      foreach ($this->routes as $route) {
+         $paths[] = $route->path();
+      }
+      return $paths;
+      // return array_map(fn($route) => $route->path(), $this->routes);
    }
 
    public function redirect($path)
    {
       header("Location: {$path}", true, 301);
       echo "Redirected to: {$path}"; // ✅ Echo a testable message
-      // exit();
+      // exit;
    }
 
    public function routes(): array
