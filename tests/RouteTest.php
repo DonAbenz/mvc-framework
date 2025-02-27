@@ -62,21 +62,27 @@ class RouteTest extends TestCase
       $route = new Route('GET', '/products/view/{product}', fn() => 'response');
       $this->assertTrue($route->matches('GET', '/products/view/123'));
    }
-
+   
    public function test_route_with_parameters()
    {
       $route = new Route('GET', '/products/{id}/view', fn() => 'response');
       $this->assertTrue($route->matches('GET', '/products/1/view'));
       $this->assertEquals(['id' => '1'], $route->parameters());
    }
-
+   
    public function test_route_with_optional_parameters()
    {
       $route = new Route('GET', '/blog/{slug?}', fn() => 'response');
       $this->assertTrue($route->matches('GET', '/blog/hello-world'));
       $this->assertEquals(['slug' => 'hello-world'], $route->parameters());
-
+      
       $this->assertTrue($route->matches('GET', '/blog'));
       $this->assertEquals(['slug' => null], $route->parameters());
+   }
+   
+   public function test_can_add_name_to_route() {
+      $route = (new Route('GET', '/home', fn() => 'response'))->name('home');
+
+      $this->assertEquals('home', $route->name());
    }
 }

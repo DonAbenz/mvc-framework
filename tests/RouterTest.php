@@ -89,4 +89,51 @@ class RouterTest extends TestCase
 
       $this->assertEquals("server error", $response);
    }
+
+   public function test_can_build_url_using_named_route()
+   {
+      $this->router->add('GET', '/products/{page?}', fn() => $this->router->current()->parameters())->name('product-list');
+      $accessName = 'product-list';
+
+      try {
+         $path = $this->router->route($accessName);
+         $this->sendRequest(method: 'GET', path: $path);
+         $response = $this->router->dispatch();
+
+         $this->assertEquals('/products/', $path);
+         $this->assertNotEmpty($response);
+      } catch (\Throwable $th) {
+         $this->assertEquals('no route with that name', $th->getMessage());
+         $this->fail('no route with the name ' . $accessName);
+      }
+   }
+
+   public function test_can_build_url_using_named_route_with_parameters()
+   {
+      $this->router->add('GET', '/products/{page?}', fn() => $this->router->current()->parameters())->name('product-list');
+      $accessName = 'product-list';
+
+      $path = $this->router->route($accessName, ['page' => 1]);
+      $this->sendRequest(method: 'GET', path: $path);
+      $response = $this->router->dispatch();
+
+      $this->assertEquals('/products/1', $path);
+      $this->assertNotEmpty($response);
+      $this->assertArrayHasKey('page', $response);
+      $this->assertEquals('1', $response['page']);
+   }
+   
+   public function test_can_build_url_using_named_route_without_parameters()
+   {
+      $this->router->add('GET', '/products/{page?}', fn() => $this->router->current()->parameters())->name('product-list');
+      $accessName = 'product-list';
+      
+      $path = $this->router->route($accessName);
+      $this->sendRequest(method: 'GET', path: $path);
+      $response = $this->router->dispatch();
+      
+      $this->assertEquals("/products/", $path);
+      $this->assertArrayHasKey('page', $response);
+      $this->assertEmpty($response['page']);
+   }
 }

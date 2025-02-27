@@ -1,4 +1,5 @@
 <?php
+
 use Core\Routing\Router;
 
 return function (Router $router) {
@@ -28,4 +29,14 @@ return function (Router $router) {
          return "service is {$parameters['service']}";
       },
    );
+
+   $router->add(
+      'GET',
+      '/products/{page?}',
+      function () use ($router) {
+         $parameters = $router->current()->parameters();
+         $parameters['page'] ??= 1;
+         return "products for page {$parameters['page']}";
+      },
+   )->name('product-list');
 };
