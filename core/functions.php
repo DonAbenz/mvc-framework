@@ -16,17 +16,17 @@ function dd($value)
 set_error_handler(function ($e) {
    http_response_code(500);
    echo "<pre>";
-   echo "Server error: " . $e->getMessage();
+   echo "Server error: ";
    echo "<br>";
-   echo $e->getTrace();
+   echo $e;
    echo "</pre>";
 });
 
 set_exception_handler(function ($e) {
    http_response_code(500);
    echo "<pre>";
-   echo "Server error: " . $e->getMessage();
+   echo "Exception: ";
    echo "<br>";
-   echo $e->getTrace();
+   echo $e;
    echo "</pre>";
 });

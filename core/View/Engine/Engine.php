@@ -2,7 +2,9 @@
 
 namespace Core\View\Engine;
 
+use Core\View\View;
+
 interface Engine
 {
-   public function render(string $path, array $data = []): string;
+   public function render(View $view): string;
 }

@@ -2,12 +2,14 @@
 
 namespace Core\View\Engine;
 
+use Core\View\View;
+
 class BasicEngine implements Engine
 {
-   public function render(string $path, array $data = []): string
+   public function render(View $view): string
    {
-      $contents = file_get_contents($path);
-      foreach ($data as $key => $value) {
+      $contents = file_get_contents($view->path);
+      foreach ($view->data as $key => $value) {
          $contents = str_replace(
             '{' . $key . '}',
             $value,

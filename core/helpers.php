@@ -3,7 +3,7 @@
 use Core\View;
 
 if (!function_exists('view')) {
-   function view(string $template, array $data = [])
+   function view(string $template, array $data = []): View\View
    {
       static $manager;
 
@@ -14,6 +14,7 @@ if (!function_exists('view')) {
          $manager->addEngine('basic.php', new View\Engine\BasicEngine());
          $manager->addEngine('php', new View\Engine\PhpEngine());
       }
-      return $manager->render($template, $data);
+
+      return $manager->resolve($template, $data);
    }
 }

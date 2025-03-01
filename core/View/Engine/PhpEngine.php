@@ -2,25 +2,47 @@
 
 namespace Core\View\Engine;
 
+use Core\View\View;
+use function view;
+
 class PhpEngine implements Engine
 {
-   protected string $path;
+   protected $layouts = [];
 
    protected function escape(string $content): string
    {
       return htmlspecialchars($content, ENT_QUOTES);
    }
 
-   public function render(string $path, array $data = []): string
+   protected function extends(string $template): static
    {
-      $this->path = $path;
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+      $this->layouts[realpath($backtrace[0]['file'])] = $template;
+      return $this;
+   }
 
-      extract($data);
+   protected function includes(string $template, $data = []): void
+   {
+      print view($template, $data);
+   }
+
+   public function render(View $view): string
+   {
+      extract($view->data);
 
       ob_start();
-      include($this->path);
-      $contents = ob_get_contents();
-      ob_end_clean();
+      include($view->path);
+      $contents = ob_get_clean();
+
+      if ($layout = $this->layouts[$view->path] ?? null) {
+         
+         $contentsWithLayout = view($layout, array_merge(
+            $view->data,
+            ['contents' => $contents],
+         ));
+
+         return $contentsWithLayout;
+      }
 
       return $contents;
    }
