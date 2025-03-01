@@ -40,6 +40,7 @@ class Router
             return $matching->dispatch(); // 🚀 Dispatch the handler
          } catch (Throwable $e) {
             return $this->dispatchError();
+            // throw $e;
          }
       }
 
@@ -93,7 +94,7 @@ class Router
       string $name,
       array $parameters = [],
    ): string {
-      
+
       foreach ($this->routes as $route) {
          if ($route->name() === $name) {
             $finds = [];

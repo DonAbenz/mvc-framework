@@ -11,7 +11,7 @@ class ControllerTest extends TestCase
       $response = $controller->index();
 
       // Expected content from the view
-      $expectedContent = "<h1>Welcome to My MVC Framework!</h1>";
+      $expectedContent = "Hello world!";
 
       // Check if the response contains the expected HTML output
       $this->assertStringContainsString($expectedContent, $response);

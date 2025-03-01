@@ -8,7 +8,7 @@ class View
       extract($data);
       ob_start();
 
-      $viewFile = __DIR__ . "/../app/views/{$view}.php";
+      $viewFile = __DIR__ . "/../resources/views/{$view}.php";
 
       if (!file_exists($viewFile)) {
          die("View file not found: {$viewFile}");

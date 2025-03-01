@@ -3,8 +3,6 @@ const BASE_PATH = __DIR__ . '/../';
 
 require_once BASE_PATH . 'vendor/autoload.php';
 
-require_once BASE_PATH . 'functions.php';
-
 $router = new Core\Routing\Router();
 
 $routes = require_once BASE_PATH . 'app/routes.php';

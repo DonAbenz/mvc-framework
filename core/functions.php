@@ -13,17 +13,12 @@ function dd($value)
    die();
 }
 
-function abort($code)
-{
-   global $routes;
-   header('HTTP/1.1 500 Internal Server Error');
-   $routes[$code]();
-}
-
 set_error_handler(function ($e) {
    http_response_code(500);
    echo "<pre>";
    echo "Server error: " . $e->getMessage();
+   echo "<br>";
+   echo $e->getTrace();
    echo "</pre>";
 });
 
@@ -31,5 +26,7 @@ set_exception_handler(function ($e) {
    http_response_code(500);
    echo "<pre>";
    echo "Server error: " . $e->getMessage();
+   echo "<br>";
+   echo $e->getTrace();
    echo "</pre>";
 });
