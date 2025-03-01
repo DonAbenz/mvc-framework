@@ -6,6 +6,11 @@ class PhpEngine implements Engine
 {
    protected string $path;
 
+   protected function escape(string $content): string
+   {
+      return htmlspecialchars($content, ENT_QUOTES);
+   }
+
    public function render(string $path, array $data = []): string
    {
       $this->path = $path;
