@@ -5,19 +5,20 @@ use Core\Routing\Router;
 return function (Router $router) {
    $router->add('GET', '/', fn() => view('home', ['name' => 'Don']));
    $router->add('GET', '/old-home', fn() => $router->redirect('/'));
-
    $router->add('GET', '/has-server-error', fn() => throw new Exception());
    $router->add('GET', '/has-validation-error', fn() => $router->dispatchNotAllowed());
-
+   
    $router->add(
       'GET',
       '/products/view/{product}',
       function () use ($router) {
          $parameters = $router->current()->parameters();
-         return "product is {$parameters['product']}";
+         return view('products/view', [
+            'product' => $parameters['product'],
+         ]);
       },
    );
-
+   
    $router->add(
       'GET',
       '/services/view/{service?}',
@@ -39,4 +40,5 @@ return function (Router $router) {
          return "products for page {$parameters['page']}";
       },
    )->name('product-list');
+
 };

@@ -10,7 +10,9 @@ if (!function_exists('view')) {
       if (!$manager) {
          $manager = new View\Manager();
          $manager->addPath(__DIR__ . '/../resources/views');
+
          $manager->addEngine('basic.php', new View\Engine\BasicEngine());
+         $manager->addEngine('php', new View\Engine\PhpEngine());
       }
       return $manager->render($template, $data);
    }
