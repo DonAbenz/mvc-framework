@@ -2,4 +2,4 @@
 
 <h1>Product</h1>
 
-<?php $this->includes('includes/product-details', ['product' => $product]); ?>
+<?php $this->includes('includes/product-details', ['product' => $product, 'scary' => $scary]); ?>

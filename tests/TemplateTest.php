@@ -27,7 +27,7 @@ class TemplateTest extends TestCase
 
       $this->assertStringContainsString("This is the product page for 123", $output);
    }
-   
+
    public function test_can_compose_php_in_html_templates_avoiding_xss_hazard()
    {
       $engine = new Core\View\Engine\PhpEngine();

@@ -6,6 +6,8 @@ use Core\View\View;
 
 class BasicEngine implements Engine
 {
+   use HasManager;
+
    public function render(View $view): string
    {
       $contents = file_get_contents($view->path);

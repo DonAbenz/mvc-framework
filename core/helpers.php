@@ -13,6 +13,8 @@ if (!function_exists('view')) {
 
          $manager->addEngine('basic.php', new View\Engine\BasicEngine());
          $manager->addEngine('php', new View\Engine\PhpEngine());
+
+         $manager->addMacro('escape', fn($value) => htmlspecialchars($value));
       }
 
       return $manager->resolve($template, $data);

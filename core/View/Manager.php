@@ -2,6 +2,7 @@
 
 namespace Core\View;
 
+use Closure;
 use Exception;
 use Core\View\Engine\Engine;
 
@@ -9,6 +10,7 @@ class Manager
 {
    protected array $paths = [];
    protected array $engines = [];
+   protected array $macros = [];
 
    public function addPath(string $path): static
    {
@@ -19,6 +21,13 @@ class Manager
    public function addEngine(string $extension, Engine $engine): static
    {
       $this->engines[$extension] = $engine;
+      $this->engines[$extension]->setManager($this);
+      return $this;
+   }
+
+   public function addMacro(string $name, Closure $closure): static
+   {
+      $this->macros[$name] = $closure;
       return $this;
    }
 
@@ -48,5 +57,14 @@ class Manager
       }
 
       throw new Exception("Could not resolve '{$template}'");
+   }
+
+   public function useMacro(string $name, ...$values)
+   {
+      if (isset($this->macros[$name])) {
+         $bound = $this->macros[$name]->bindTo($this);
+         return $bound(...$values);
+      }
+      throw new Exception("Macro isn't defined: '{$name}'");
    }
 }

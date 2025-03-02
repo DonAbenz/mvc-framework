@@ -3,17 +3,18 @@
 namespace Core\View\Engine;
 
 use Core\View\View;
-use function view;
 
 class PhpEngine implements Engine
 {
+   use HasManager;
+
    protected $layouts = [];
 
-   protected function escape(string $content): string
+   public function __call(string $name, $values)
    {
-      return htmlspecialchars($content, ENT_QUOTES);
+      return $this->manager->useMacro($name, ...$values);
    }
-
+   
    protected function extends(string $template): static
    {
       $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
@@ -35,7 +36,7 @@ class PhpEngine implements Engine
       $contents = ob_get_clean();
 
       if ($layout = $this->layouts[$view->path] ?? null) {
-         
+
          $contentsWithLayout = view($layout, array_merge(
             $view->data,
             ['contents' => $contents],
