@@ -22,11 +22,6 @@ class PhpEngine implements Engine
       return $this;
    }
 
-   protected function includes(string $template, $data = []): void
-   {
-      print view($template, $data);
-   }
-
    public function render(View $view): string
    {
       extract($view->data);
