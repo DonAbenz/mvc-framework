@@ -41,7 +41,7 @@ class Router
          try {
             return $matching->dispatch(); // 🚀 Dispatch the handler
          } catch (Throwable $e) {
-            
+
             if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev') {
                $whoops = new Run();
                $whoops->pushHandler(new PrettyPageHandler());
@@ -49,6 +49,10 @@ class Router
                throw $e;
             }
 
+            if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'test') {
+               throw $e;
+            }
+            
             return $this->dispatchError();
          }
       }

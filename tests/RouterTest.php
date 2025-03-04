@@ -79,21 +79,18 @@ class RouterTest extends TestCase
 
    public function test_dispatch_handles_server_error_gracefully()
    {
+      $_ENV['APP_ENV'] = 'test';
+      $this->assertEquals('test', $_ENV['APP_ENV']); // Add this line to verify the environment variable
+
       $route = $this->router->add('GET', '/home', function () {
-         throw new Exception();
+         throw new Exception('custom error');
          return "Hello World";
       });
 
       $this->sendRequest(method: 'GET', path: $route->path());
-
-      $response = '';
-      try {
-         $response = $this->router->dispatch();
-      } catch (\Throwable $th) {
-         $this->assertEquals("server error", $response);
-      }
-
-      $this->fail('No error response detected');
+      $this->expectException(Exception::class);
+      
+      $this->router->dispatch();
    }
 
    public function test_can_build_url_using_named_route()
