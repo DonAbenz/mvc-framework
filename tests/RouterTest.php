@@ -85,9 +85,15 @@ class RouterTest extends TestCase
       });
 
       $this->sendRequest(method: 'GET', path: $route->path());
-      $response = $this->router->dispatch();
 
-      $this->assertEquals("server error", $response);
+      $response = '';
+      try {
+         $response = $this->router->dispatch();
+      } catch (\Throwable $th) {
+         $this->assertEquals("server error", $response);
+      }
+
+      $this->fail('No error response detected');
    }
 
    public function test_can_build_url_using_named_route()
@@ -122,16 +128,16 @@ class RouterTest extends TestCase
       $this->assertArrayHasKey('page', $response);
       $this->assertEquals('1', $response['page']);
    }
-   
+
    public function test_can_build_url_using_named_route_without_parameters()
    {
       $this->router->add('GET', '/products/{page?}', fn() => $this->router->current()->parameters())->name('product-list');
       $accessName = 'product-list';
-      
+
       $path = $this->router->route($accessName);
       $this->sendRequest(method: 'GET', path: $path);
       $response = $this->router->dispatch();
-      
+
       $this->assertEquals("/products/", $path);
       $this->assertArrayHasKey('page', $response);
       $this->assertEmpty($response['page']);

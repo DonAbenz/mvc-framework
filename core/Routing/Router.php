@@ -4,6 +4,8 @@ namespace Core\Routing;
 
 use Exception;
 use Throwable;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
 
 class Router
 {
@@ -39,8 +41,15 @@ class Router
          try {
             return $matching->dispatch(); // 🚀 Dispatch the handler
          } catch (Throwable $e) {
+            
+            if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev') {
+               $whoops = new Run();
+               $whoops->pushHandler(new PrettyPageHandler());
+               $whoops->register();
+               throw $e;
+            }
+
             return $this->dispatchError();
-            // throw $e;
          }
       }
 
