@@ -7,14 +7,14 @@ class Route
    protected string $method;
    protected string $path;
    protected $handler;
-   
+
    protected array $parameters = [];
    protected ?string $name = null;
 
    public function __construct(
       string $method,
       string $path,
-      callable $handler
+      $handler
    ) {
       $this->method = $method;
       $this->path = $path;
@@ -23,6 +23,16 @@ class Route
 
    public function dispatch()
    {
+      if (is_array($this->handler)) {
+         [$class, $method] = $this->handler;
+
+         if (is_string($class)) {
+            return (new $class)->{$method}();
+         }
+         
+         return $class->{$method}();
+      }
+
       return call_user_func($this->handler);;
    }
 
@@ -88,11 +98,12 @@ class Route
 
    public function name(string $name = null): mixed
    {
-      if ($name) {
-         $this->name = $name;
-         return $this;
-      }
-      return $this->name;
+      if (func_num_args() === 0) {
+         return $this->name;
+     }
+ 
+     $this->name = $name;
+     return $this;
    }
 
    /**

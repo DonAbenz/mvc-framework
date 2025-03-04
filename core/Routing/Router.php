@@ -2,6 +2,7 @@
 
 namespace Core\Routing;
 
+use Core\Validation\ValidationException;
 use Exception;
 use Throwable;
 use Whoops\Handler\PrettyPageHandler;
@@ -15,7 +16,7 @@ class Router
    public function add(
       string $method,
       string $path,
-      callable $handler
+      $handler
    ): Route {
       $route = $this->routes[] = new Route(
          $method,
@@ -42,6 +43,11 @@ class Router
             return $matching->dispatch(); // 🚀 Dispatch the handler
          } catch (Throwable $e) {
 
+            if ($e instanceof ValidationException) {
+               $_SESSION['errors'] = $e->getErrors();
+               return redirect($_SERVER['HTTP_REFERER']);
+            }
+
             if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev') {
                $whoops = new Run();
                $whoops->pushHandler(new PrettyPageHandler());
@@ -52,7 +58,7 @@ class Router
             if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'test') {
                throw $e;
             }
-            
+
             return $this->dispatchError();
          }
       }

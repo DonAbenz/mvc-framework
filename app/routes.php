@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\ListProductsController;
+use App\Http\Controllers\ShowHomeController;
+use App\Http\Controllers\Users\RegisterUserController;
+use App\Http\Controllers\Users\ShowRegisterFormController;
 use Core\Routing\Router;
 
 return function (Router $router) {
-   $router->add('GET', '/', fn() => view('home', ['name' => 'Don']));
+   $router->add('GET', '/', [ShowHomeController::class, 'handle']);
    $router->add('GET', '/old-home', fn() => $router->redirect('/'));
    $router->add('GET', '/has-server-error', fn() => throw new Exception());
    $router->add('GET', '/has-validation-error', fn() => $router->dispatchNotAllowed());
@@ -23,11 +27,8 @@ return function (Router $router) {
    $router->add(
       'GET',
       '/products/list',
-      function () use ($router) {
-         $parameters = $router->current()->parameters();
-         return view('products/list', ['next' => 'https://google.com']);
-      },
-   );
+      [new ListProductsController($router), 'handle'],
+   )->name('list-products');
 
    $router->add(
       'GET',
@@ -50,4 +51,16 @@ return function (Router $router) {
          return "products for page {$parameters['page']}";
       },
    )->name('product-list');
+
+   $router->add(
+      'GET',
+      '/register',
+      [new ShowRegisterFormController($router), 'handle'],
+   )->name('show-register-form');
+
+   $router->add(
+      'POST',
+      '/register',
+      [new RegisterUserController($router), 'handle'],
+   )->name('register-user');
 };

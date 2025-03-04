@@ -1,5 +1,8 @@
 <?php
 
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
+
 function dump($value)
 {
    echo "<pre>";
@@ -14,19 +17,19 @@ function dd($value)
 }
 
 set_error_handler(function ($e) {
-   http_response_code(500);
-   echo "<pre>";
-   echo "Server error: ";
-   echo "<br>";
-   echo $e;
-   echo "</pre>";
+   if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev') {
+      $whoops = new Run();
+      $whoops->pushHandler(new PrettyPageHandler());
+      $whoops->register();
+      throw $e;
+   }
 });
 
 set_exception_handler(function ($e) {
-   http_response_code(500);
-   echo "<pre>";
-   echo "Exception: ";
-   echo "<br>";
-   echo $e;
-   echo "</pre>";
+   if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev') {
+      $whoops = new Run();
+      $whoops->pushHandler(new PrettyPageHandler());
+      $whoops->register();
+      throw $e;
+   }
 });
